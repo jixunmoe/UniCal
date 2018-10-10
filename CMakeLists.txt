@@ -9,7 +9,7 @@ find_library(SDL2_IMAGE_LIBRARY SDL2_image CONFIG REQUIRED)
 find_library(SDL2_IMAGE_LIB SDL2_image CONFIG REQUIRED)
 find_library(SDL2_TTF_LIB SDL2_ttf CONFIG REQUIRED)
 
-add_compile_definitions(__STDC_WANT_LIB_EXT1__=1)
+add_definitions(-D__STDC_WANT_LIB_EXT1__=1)
 
 file(GLOB SRCS src/*.cpp)
 include_directories(src)
