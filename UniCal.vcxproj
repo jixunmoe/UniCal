@@ -161,12 +161,17 @@
     <ClInclude Include="src\controls\IBaseControl.hpp" />
     <ClInclude Include="src\controls\LabelControl.hpp" />
     <ClInclude Include="src\FontManager.hpp" />
+    <ClInclude Include="src\ics\date.h" />
     <ClInclude Include="src\ics\ics_parse.hpp" />
     <ClInclude Include="src\ics\types.hpp" />
+    <ClInclude Include="src\safe_function.h" />
     <ClInclude Include="src\types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

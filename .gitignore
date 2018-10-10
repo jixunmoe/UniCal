@@ -1,6 +1,7 @@
 /*.vcxproj.user
 ical.ics
-.vscode
+/.vscode
+/.vs
 build
 debug
 

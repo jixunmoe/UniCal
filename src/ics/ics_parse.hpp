@@ -7,6 +7,8 @@
 #include <fstream>
 #include <functional>
 
+#include "../safe_function.h"
+
 #define ICS_STR_EQUAL_TO(a, b) (strncmp((a), (b), sizeof(b)) == 0)
 // typedef bool (*ics_event_filter)(CalendarEvent& event);
 typedef std::function<bool(CalendarEvent& event)> ics_event_filter;
@@ -81,7 +83,6 @@ public:
         continue;
       }
 
-      const int length = split - event_buffer;
       *split = '\x00';
       char* value = split + 1;
 
@@ -102,9 +103,9 @@ public:
       // ^ Every second comma is for new line.
       if (ICS_STR_EQUAL_TO(event_buffer, "SUMMARY"))
       {
-        strcpy_s(event.summary, sizeof(event.summary), value);
+        Safe::strcpy(event.summary, sizeof(event.summary), value);
 #if CALENDAR_UNIVERSITY_YORK_EXTEND_INFO
-        strncpy_s(event.module, sizeof(event.module), event.summary, 4);
+        Safe::strncpy(event.module, sizeof(event.module), event.summary, 4);
         
         {
           // Populate event type (lecture/practial)
@@ -113,20 +114,20 @@ public:
           {
             beginType += 1;
             char* endType = strchr(beginType, ')');
-            strncpy_s(event.type, sizeof(event.type), beginType, endType - beginType);
+            Safe::strncpy(event.type, sizeof(event.type), beginType, endType - beginType);
           }
         }
 #endif
       } else if (ICS_STR_EQUAL_TO(event_buffer, "LOCATION"))
       {
-        strcpy_s(event.location, sizeof(event.location), value);
+        Safe::strcpy(event.location, sizeof(event.location), value);
 #if CALENDAR_UNIVERSITY_YORK_EXTEND_INFO
         {
           char* comma = strchr(value, ',');
           if (comma != nullptr) *comma = '\x00';
         }
 
-        strcpy_s(event.room, sizeof(event.room), value);
+        Safe::strcpy(event.room, sizeof(event.room), value);
 #endif
       } else if (ICS_STR_EQUAL_TO(event_buffer, "DTSTART"))
       {
@@ -138,12 +139,12 @@ public:
 #if CALENDAR_DESC_FIELD
       else if (ICS_STR_EQUAL_TO(event_buffer, "DESCRIPTION"))
       {
-        strcpy_s(event.description, sizeof(event.description), value);
+        Safe::strcpy(event.description, sizeof(event.description), value);
 #if CALENDAR_UNIVERSITY_YORK_EXTEND_INFO
         extract_desc_text(event.description, "Staff member(s): ", event_buffer, sizeof(event_buffer));
         if (event_buffer[0] != 0)
         {
-          strcpy_s(event.staff, sizeof(event.staff), event_buffer);
+          Safe::strcpy(event.staff, sizeof(event.staff), event_buffer);
         }
 #endif
       }
@@ -174,10 +175,10 @@ private:
         if (value_end == nullptr)
         {
           // end of text
-          strcpy_s(buffer, size, value_begin);
+          Safe::strcpy(buffer, size, value_begin);
         } else
         {
-          strncpy_s(buffer, size, value_begin, value_end - value_begin);
+          Safe::strncpy(buffer, size, value_begin, value_end - value_begin);
         }
         return;
       }
@@ -214,10 +215,10 @@ private:
 
     if (timezone == nullptr)
     {
-      strcpy_s(time.timezone, sizeof(time.timezone), "UTC");
+      Safe::strcpy(time.timezone, sizeof(time.timezone), "UTC");
     } else
     {
-      strcpy_s(time.timezone, sizeof(time.timezone), timezone + 5);
+      Safe::strcpy(time.timezone, sizeof(time.timezone), timezone + 5);
     }
     
     time.year = read_dec(time_str, 4);

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="src\controls\CalendarItemControl.hpp">
+      <Filter>controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\controls\CalendarListControl.hpp">
+      <Filter>controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\controls\FrameControl.hpp">
+      <Filter>controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\controls\IBaseControl.hpp">
+      <Filter>controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\controls\LabelControl.hpp">
+      <Filter>controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ics\ics_parse.hpp">
+      <Filter>ics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ics\types.hpp">
+      <Filter>ics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FontManager.hpp" />
+    <ClInclude Include="src\types.h" />
+    <ClInclude Include="src\ics\date.h">
+      <Filter>ics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\safe_function.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="controls">
+      <UniqueIdentifier>{23201500-bc65-4110-a9e3-4368eba030a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ics">
+      <UniqueIdentifier>{beea6794-2f0f-42e9-9205-e9f2de373550}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{fb6439b4-8367-4305-a01f-f708bca88c57}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
+  </ItemGroup>
+</Project>

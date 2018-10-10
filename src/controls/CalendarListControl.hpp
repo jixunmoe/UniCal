@@ -1,11 +1,13 @@
 #pragma once
 
-#include "./CalendarItemControl.hpp"
 #include "./IBaseControl.hpp"
+#include "./CalendarItemControl.hpp"
+
+#include "../ics/ics_parse.hpp"
+#include "../safe_function.h"
 
 #include <SDL2/SDL.h>
 #include <vector>
-#include "../ics/ics_parse.hpp"
 #include <chrono>
 
 #define CALENDAR_ITEM_HEIGHT (14*3 + 4)
@@ -25,13 +27,13 @@ public:
     time_t tt;
     time(&tt);
     // ReSharper disable once CppDeprecatedEntity
-    tm local;
-    localtime_s(&local, &tt);
+    tm local{};
+    Safe::localtime(&local, &tt);
 
     int year = 1900 + local.tm_year;
     int month = local.tm_mon + 1;
     
-    CalendarEvent event;
+    CalendarEvent event{};
     ics_parser->next_event(event, [&local, &year, &month](CalendarEvent& e)->bool
     {
       return 
