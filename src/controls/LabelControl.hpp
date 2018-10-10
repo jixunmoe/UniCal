@@ -7,7 +7,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <string>
-#include "FontManager.hpp"
+#include "../FontManager.hpp"
 
 class LabelControl : public IBaseControl
 {
