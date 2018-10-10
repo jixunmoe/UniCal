@@ -1,5 +1,7 @@
 #pragma once
 
+#define __STDC_WANT_LIB_EXT1__ 1
+
 #include "types.hpp"
 
 #include <string>
@@ -7,7 +9,7 @@
 #include <fstream>
 #include <functional>
 
-#define ICS_STR_EQUAL_TO(a, b) (std::strncmp((a), (b), sizeof(b)) == 0)
+#define ICS_STR_EQUAL_TO(a, b) (strncmp((a), (b), sizeof(b)) == 0)
 // typedef bool (*ics_event_filter)(CalendarEvent& event);
 typedef std::function<bool(CalendarEvent& event)> ics_event_filter;
 
@@ -28,7 +30,7 @@ public:
       {
         break;
       }
-      if (std::strncmp(buffer, "BEGIN:VCALENDAR", size) == 0)
+      if (strncmp(buffer, "BEGIN:VCALENDAR", size) == 0)
       {
         break;
       }
@@ -75,7 +77,7 @@ public:
         }
       }
 
-      const auto split = std::strchr(event_buffer, ':');
+      const auto split = strchr(event_buffer, ':');
       if (split == nullptr)
       {
         continue;
@@ -86,7 +88,7 @@ public:
       char* value = split + 1;
 
       
-      char* name_params = std::strchr(event_buffer, ';');
+      char* name_params = strchr(event_buffer, ';');
       if (name_params)
       {
         *name_params = '\x00';
@@ -210,7 +212,7 @@ private:
   {
     // DTSTART;TZID=Europe/London:20180812T234500
 
-    char* timezone = params == nullptr ? nullptr : std::strstr(params, "TZID=");
+    char* timezone = params == nullptr ? nullptr : strstr(params, "TZID=");
 
     if (timezone == nullptr)
     {
