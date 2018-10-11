@@ -11,6 +11,12 @@
 
 class LabelControl : public IBaseControl
 {
+public:
+  enum LabelAlign
+  {
+    LEFT, CENTER, RIGHT
+  };
+
 private:
   std::string m_text;
   SDL_Color m_colour;
@@ -27,6 +33,8 @@ private:
   
   bool m_vertical_center;
   bool m_horizontal_center;
+
+  LabelAlign m_align = CENTER;
 
 public:
   LabelControl(SDL_Rect* pos = nullptr): IBaseControl(pos)
@@ -48,6 +56,11 @@ public:
   ~LabelControl()
   {
     invalidate_texture();
+  }
+
+  void set_align(LabelAlign align)
+  {
+    m_align = align;
   }
 
   void set_text(std::string text)
@@ -138,8 +151,16 @@ private:
     };
 
     // Center the label
-    const int xOffset = MAX((m_pos.w - m_surface->w) / 2, 0);
-    const int yOffset = MAX((m_pos.h - m_surface->h) / 2, 0);
+    int xOffset = 0;
+    int yOffset = MAX((m_pos.h - m_surface->h) / 2, 0);
+
+    if (m_align == CENTER)
+    {
+      xOffset = MAX((m_pos.w - m_surface->w) / 2, 0);
+    } else if (m_align == RIGHT)
+    {
+      xOffset = MAX((m_pos.w - m_surface->w), 0);
+    }
 
     m_dst_rect = SDL_Rect{
       m_pos.x + xOffset, m_pos.y + yOffset,

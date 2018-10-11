@@ -62,24 +62,16 @@ int main(int argc, char** argv)
 
   {
     SDL_Rect position = {
-      4, 4,
-      WND_WIDTH - 8, WND_HEIGHT - 8
+      0, 0,
+      4, 4
     };
     FrameControl* app_frame = new FrameControl(&position);
     controls.push_back(app_frame);
   }
   {
     SDL_Rect position = {
-      4, 4,
-      10, 10
-    };
-    FrameControl* app_frame = new FrameControl(&position);
-    controls.push_back(app_frame);
-  }
-  {
-    SDL_Rect position = {
-      4, 4,
-      WND_WIDTH - 8, WND_HEIGHT - 8
+      4, -1,
+      WND_WIDTH - 8, WND_HEIGHT + 2
     };
     CalendarListControl* cal_list = new CalendarListControl(&position);
     controls.push_back(cal_list);
