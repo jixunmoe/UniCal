@@ -34,7 +34,7 @@ int main(int argc, char** argv)
     SDL_Quit();
   }
 
-  SDL_ShowCursor(false);
+  SDL_ShowCursor(SDL_DISABLE);
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
