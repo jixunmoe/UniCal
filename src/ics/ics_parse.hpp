@@ -219,7 +219,7 @@ private:
       result = result * 10 + (str[i] - '0');
     }
 
-    printf("read %s(size=%d)=%d\n", str, size, result);
+    // printf("read %s(size=%d)=%d\n", str, size, result);
 
     return result;
   }

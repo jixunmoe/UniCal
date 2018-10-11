@@ -108,7 +108,7 @@ public:
 
   void resize()
   {
-    printf("CalItem.size = {%d, %d, %d, %d}\n", m_pos.x, m_pos.y, m_pos.w, m_pos.h);
+    // this->debug("CalItem");
 
     const int timeWidth = 3 * 14;
     const int fieldWidth = m_pos.w - timeWidth;
@@ -134,10 +134,10 @@ public:
       fieldWidth, fieldHeight
     });
     
-    m_time->debug("Cal.Time");
-    m_subject->debug("Cal.Subj");
-    m_lecturer->debug("Cal.Lect");
-    m_location->debug("Cal.Loca");
+    // m_time->debug("Cal.Time");
+    // m_subject->debug("Cal.Subj");
+    // m_lecturer->debug("Cal.Lect");
+    // m_location->debug("Cal.Loca");
   }
 
   void render() {

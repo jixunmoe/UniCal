@@ -14,24 +14,36 @@
 
 struct CalendarTime
 {
-  unsigned short year;
-  unsigned short month;
-  unsigned short day;
+  uint16_t year;
+  uint8_t month;
+  uint8_t day;
 
-  unsigned short hour;
-  unsigned short min;
+  uint8_t hour;
+  uint8_t min;
 
   char timezone[SIZE_TINYTEXT];
 };
 
-inline long long int getCalendarStamp(long long int year, long long int month, long long int day, long long int hour, long long int min)
+inline uint32_t getCalendarStamp(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t min)
 {
+  // 9999: 12 bit
+  // 12: 4 bit
+  // 31: 5 bit
+  // 24: 5 bit
+  // 60: 6 bit
+  // ---- 12 + 4 + 5 + 5 + 6 = 32 bit
+  // ----- year << 20
+  // -------- month << 16
+  // ----------- day << 11
+  // -------------- hour << 6
+  // ----------------- min << 0
+
   return
-    100000000L * year +
-    1000000L * month +
-    10000L * day + 
-    100L * hour +
-    min;
+    static_cast<uint32_t>(year << 20) |
+    static_cast<uint32_t>(month << 16) |
+    static_cast<uint32_t>(day << 11) |
+    static_cast<uint32_t>(hour << 6) |
+    static_cast<uint32_t>(min << 0);
 }
 
 inline long long int getCalendarStamp(CalendarTime& time)

@@ -50,9 +50,9 @@ public:
     const int month = local.tm_mon + 1;
     int day = local.tm_mday;
 
-    long long int now_stamp = getCalendarStamp(year, month, day, local.tm_hour, local.tm_min);
+    uint32_t now_stamp = getCalendarStamp(year, month, day, local.tm_hour, local.tm_min);
 
-    printf("now_stamp = %llu\n", now_stamp);
+    printf("now_stamp = %u\n", now_stamp);
     
     CalendarEvent event{};
     ics_parser->restart();
@@ -69,17 +69,17 @@ public:
         return getCalendarStamp(e.start) >= now_stamp;
       });
 
-      printf("found %d event; title = %s\n", found, event.summary);
-
-      if (day != event.start.day)
-      {
-        day = event.start.day;
-        m_dates.insert(std::pair<int, CalendarTime>(p.y, event.start));
-        p.y = p.y + CALENDAR_DATE_HEIGHT - 1;
-      }
+      printf("found event: (%d); title = %s at %02d/%02d/%04d\n", found, event.summary, event.start.day, event.start.month, event.start.year);
 
       if (found)
       {
+        if (day != event.start.day)
+        {
+          day = event.start.day;
+          m_dates.insert(std::pair<int, CalendarTime>(p.y, event.start));
+          p.y = p.y + CALENDAR_DATE_HEIGHT - 1;
+        }
+
         m_items.at(i)->show();
         m_items.at(i)->set_calender(event);
         m_items.at(i)->set_pos_ref(p);
@@ -107,7 +107,7 @@ public:
       }
       p.y = date.first;
       snprintf(buffer, sizeof(buffer), "%02d/%02d/%04d", date.second.day, date.second.month, date.second.year);
-      printf("date.first = %d; text=%s\n", date.first, buffer);
+      printf("date.first(y pos)=%d; text=%s\n", date.first, buffer);
       m_date_labels.at(date_label_index)->set_pos(p);
       m_date_labels.at(date_label_index)->set_text(buffer);
 
