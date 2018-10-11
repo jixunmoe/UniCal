@@ -18,6 +18,7 @@
 
 class CalendarListControl : public IBaseControl {
 private:
+  std::mutex m_update_mutex;
   unsigned int m_label_render_size{0};
   std::vector<CalendarItemControl*> m_items;
   IcsParse* ics_parser = nullptr;
@@ -29,6 +30,8 @@ private:
 public:
   void update_calendar()
   {
+    std::lock_guard<std::mutex> update_mutex_guard(m_update_mutex);
+    printf("update_calendar...\n");
     m_dates.clear();
 
     SDL_Rect p = SDL_Rect{
@@ -132,6 +135,7 @@ public:
 
   void render() override
   {
+    std::lock_guard<std::mutex> update_mutex_guard(m_update_mutex);
     for (auto && item : m_items)
     {
       item->render();
