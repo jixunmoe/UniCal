@@ -116,7 +116,13 @@ public:
       {
         Safe::strcpy(event.summary, sizeof(event.summary), value);
 #if CALENDAR_UNIVERSITY_YORK_EXTEND_INFO
-        Safe::strncpy(event.module, sizeof(event.module), event.summary, 4);
+        if (strlen(event.summary) > 4 && event.summary[4] == ' ')
+        {
+          Safe::strncpy(event.module, sizeof(event.module), event.summary, 4);
+        } else
+        {
+          event.module[0] = 0;
+        }
         
         {
           // Populate event type (lecture/practial)

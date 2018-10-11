@@ -15,6 +15,7 @@
 #define NUMBER_OF_EVENTS_PER_PAGE (7)
 #define CALENDAR_ITEM_HEIGHT (14*3 + 4)
 #define CALENDAR_DATE_HEIGHT (15)
+#define CALENDAR_UPDATE_INTERVAL (std::chrono::minutes(10))
 
 class CalendarListControl : public IBaseControl {
 private:
@@ -45,9 +46,13 @@ public:
     time(&tt);
     Safe::localtime(&local, &tt);
 
-    int year = 1900 + local.tm_year;
-    int month = local.tm_mon + 1;
+    const int year = 1900 + local.tm_year;
+    const int month = local.tm_mon + 1;
     int day = local.tm_mday;
+
+    long long int now_stamp = getCalendarStamp(year, month, day, local.tm_hour, local.tm_min);
+
+    printf("now_stamp = %llu\n", now_stamp);
     
     CalendarEvent event{};
     ics_parser->restart();
@@ -59,13 +64,9 @@ public:
         m_items.push_back(new CalendarItemControl(&p));
       }
       
-      const bool found = ics_parser->next_event(event, [&local, &year, &month](CalendarEvent& e)->bool
+      const bool found = ics_parser->next_event(event, [&now_stamp](CalendarEvent& e)->bool
       {
-        return 
-          e.start.year >= year
-        && e.start.month >= month
-        && e.start.day >= local.tm_mday
-        && e.start.hour >= local.tm_hour;
+        return getCalendarStamp(e.start) >= now_stamp;
       });
 
       printf("found %d event; title = %s\n", found, event.summary);
@@ -117,7 +118,7 @@ public:
 
     // Update every 10 mins
     std::thread([this](){
-      std::this_thread::sleep_for(std::chrono::minutes(10));
+      std::this_thread::sleep_for(CALENDAR_UPDATE_INTERVAL);
       this->update_calendar();
     }).detach();
   }

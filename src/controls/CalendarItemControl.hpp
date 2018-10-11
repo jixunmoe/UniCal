@@ -52,8 +52,14 @@ public:
 #if CALENDAR_UNIVERSITY_YORK_EXTEND_INFO
     m_location->set_text(m_event.room);
     
-    snprintf(temp_buffer, sizeof(temp_buffer), "%s (%s)", m_event.module, m_event.type);
-    m_subject->set_text(temp_buffer);
+    if (m_event.module[0] != 0)
+    {
+      snprintf(temp_buffer, sizeof(temp_buffer), "%s (%s)", m_event.module, m_event.type);
+      m_subject->set_text(temp_buffer);
+    } else
+    {
+      m_subject->set_text(m_event.summary);
+    }
 #else
     m_location->set_text(m_event.location);
     m_subject->set_text(m_event.summary);

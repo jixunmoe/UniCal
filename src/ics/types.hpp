@@ -24,6 +24,21 @@ struct CalendarTime
   char timezone[SIZE_TINYTEXT];
 };
 
+inline long long int getCalendarStamp(long long int year, long long int month, long long int day, long long int hour, long long int min)
+{
+  return
+    100000000L * year +
+    1000000L * month +
+    10000L * day + 
+    100L * hour +
+    min;
+}
+
+inline long long int getCalendarStamp(CalendarTime& time)
+{
+  return getCalendarStamp(time.year, time.month, time.day, time.hour, time.min);
+}
+
 struct CalendarEvent
 {
   char location[SIZE_TEXT];
