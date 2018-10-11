@@ -119,7 +119,7 @@ public:
     std::thread([this](){
       std::this_thread::sleep_for(std::chrono::minutes(10));
       this->update_calendar();
-    });
+    }).detach();
   }
 
   CalendarListControl(SDL_Rect* pos = nullptr): IBaseControl(pos) {
