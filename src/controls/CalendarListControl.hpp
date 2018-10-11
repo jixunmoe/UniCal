@@ -22,7 +22,6 @@ private:
   unsigned int m_label_render_size{0};
   std::vector<CalendarItemControl*> m_items;
   IcsParse* ics_parser = nullptr;
-  std::future<void> m_update_task;
 
   std::vector<LabelControl*> m_date_labels;
   std::map<int, CalendarTime> m_dates;
@@ -31,6 +30,7 @@ public:
   void update_calendar()
   {
     std::lock_guard<std::mutex> update_mutex_guard(m_update_mutex);
+
     printf("update_calendar...\n");
     m_dates.clear();
 
@@ -116,7 +116,7 @@ public:
     m_label_render_size = date_label_index;
 
     // Update every 10 mins
-    m_update_task = std::async(std::launch::async, [this](){ 
+    std::thread([this](){
       std::this_thread::sleep_for(std::chrono::minutes(10));
       this->update_calendar();
     });
