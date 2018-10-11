@@ -128,7 +128,7 @@ private:
 
   void calculate_position()
   {
-    // 计算长度/高度
+    // Calculate width/height
     const int w = MIN(m_surface->w, m_pos.w);
     const int h = MIN(m_surface->h, m_pos.h);
 
@@ -137,7 +137,7 @@ private:
       w, h
     };
 
-    // 居中
+    // Center the label
     const int xOffset = MAX((m_pos.w - m_surface->w) / 2, 0);
     const int yOffset = MAX((m_pos.h - m_surface->h) / 2, 0);
 

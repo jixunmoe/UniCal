@@ -76,8 +76,8 @@ int main(int argc, char** argv)
   }
   {
     SDL_Rect position = {
-      5, 5,
-      WND_WIDTH - 10, WND_HEIGHT - 10
+      4, 4,
+      WND_WIDTH - 8, WND_HEIGHT - 8
     };
     CalendarListControl* cal_list = new CalendarListControl(&position);
     controls.push_back(cal_list);
@@ -93,19 +93,13 @@ int main(int argc, char** argv)
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    // Copy the texture on the renderer
-    // SDL_RenderCopy(renderer, texture, NULL, &dest_rect);
-
-
     for (auto& control : controls)
     {
       control->render();
     }
 
-
     // Update the window surface (show the renderer)
     SDL_RenderPresent(renderer);
-
 
     if (SDL_PollEvent(&event))
     {

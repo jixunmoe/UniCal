@@ -19,28 +19,37 @@ class IcsParse
 public:
   IcsParse(const std::string& path)
   {
-    file.open(path, std::ifstream::in | std::ifstream::binary);
-
-    char buffer[20];
-    size_t size = sizeof(buffer);
-
-    while(!file.eof())
-    {
-      if (!readline(buffer, size))
-      {
-        break;
-      }
-      if (strncmp(buffer, "BEGIN:VCALENDAR", size) == 0)
-      {
-        break;
-      }
-    }
+    open(path);
   }
   ~IcsParse()
   {
     if (file.is_open())
     {
       file.close();
+    }
+  }
+
+  void open(const std::string& path)
+  {
+    file.open(path, std::ifstream::in | std::ifstream::binary);
+    restart();
+  }
+
+  void restart()
+  {
+    char buffer[20];
+
+    file.seekg(0, std::ios_base::beg);
+    while(!file.eof())
+    {
+      if (!readline(buffer, sizeof(buffer)))
+      {
+        break;
+      }
+      if (strncmp(buffer, "BEGIN:VCALENDAR", sizeof(buffer)) == 0)
+      {
+        break;
+      }
     }
   }
 
@@ -53,6 +62,7 @@ public:
   {
     size_t str_size;
 
+    bool success = false;
     bool vevent_begin = false;
     
     while(!file.eof())
@@ -65,6 +75,7 @@ public:
         {
           if (filter(event))
           {
+            success = true;
             break;
           }
         }
@@ -151,7 +162,7 @@ public:
 #endif
     }
 
-    return false;
+    return success;
   }
 
 private:

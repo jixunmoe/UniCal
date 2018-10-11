@@ -10,7 +10,7 @@ public:
   }
 
   void render() {
-    SDL_SetRenderDrawColor(IBaseControl::get_renderer(), 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderDrawRect(IBaseControl::get_renderer(), &m_pos);
+    SDL_SetRenderDrawColor(get_renderer(), 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderDrawRect(get_renderer(), &m_pos);
   }
 };

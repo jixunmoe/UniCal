@@ -9,6 +9,8 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include <chrono>
+#include <thread>
+#include <future>
 
 #define CALENDAR_ITEM_HEIGHT (14*3 + 4)
 
@@ -18,76 +20,66 @@ private:
   IcsParse* ics_parser = nullptr;
 
 public:
-  CalendarListControl(SDL_Rect* pos = nullptr): IBaseControl(pos) {
-    char temp_buffer[1024];
-    printf("before load ical parser...\n");
-
-    ics_parser = new IcsParse("./ical.ics");
-
+  void update_calendar()
+  {
+    SDL_Rect p = SDL_Rect{
+      m_pos.x, m_pos.y,
+      m_pos.w, CALENDAR_ITEM_HEIGHT
+    };
+    
     time_t tt;
-    time(&tt);
-    // ReSharper disable once CppDeprecatedEntity
     tm local{};
+
+    time(&tt);
     Safe::localtime(&local, &tt);
 
     int year = 1900 + local.tm_year;
     int month = local.tm_mon + 1;
     
     CalendarEvent event{};
-    ics_parser->next_event(event, [&local, &year, &month](CalendarEvent& e)->bool
+    ics_parser->restart();
+
+    for(unsigned int i = 0; i < 5; i++)
     {
-      return 
-        e.start.year >= year
-      && e.start.month >= month
-      && e.start.day >= local.tm_mday;
+      if (i >= m_items.size())
+      {
+        m_items.push_back(new CalendarItemControl(&p));
+      }
+      
+      const bool found = ics_parser->next_event(event, [&local, &year, &month](CalendarEvent& e)->bool
+      {
+        return 
+          e.start.year >= year
+        && e.start.month >= month
+        && e.start.day >= local.tm_mday;
+      });
+
+      printf("found %d event; title = %s", found, event.summary);
+
+      if (found)
+      {
+        m_items.at(i)->show();
+        m_items.at(i)->set_calender(event);
+        m_items.at(i)->set_pos_ref(p);
+      } else
+      {
+        m_items.at(i)->hide();
+      }
+
+      p.y = p.y + CALENDAR_ITEM_HEIGHT - 1;
+    }
+
+    // Update every 10 mins
+    std::async(std::launch::async, [this](){ 
+      std::this_thread::sleep_for(std::chrono::minutes(10));
+      this->update_calendar();
     });
+  }
 
-    printf("ok, first event loaded.");
+  CalendarListControl(SDL_Rect* pos = nullptr): IBaseControl(pos) {
+    ics_parser = new IcsParse("./ical.ics");
 
-    SDL_Rect* p1 = new SDL_Rect{
-      m_pos.x, m_pos.y,
-      m_pos.w, CALENDAR_ITEM_HEIGHT
-    };
-    auto test_cal1 = new CalendarItemControl(p1);
-
-
-
-    snprintf(temp_buffer, sizeof(temp_buffer), "%s (%s)", event.module, event.type);
-    test_cal1->set_title(temp_buffer);
-    
-    snprintf(temp_buffer, sizeof(temp_buffer), "%02d:%02d", event.start.hour, event.start.min);
-    test_cal1->set_time(temp_buffer);
-
-    test_cal1->set_location(event.room);
-    test_cal1->set_lecturer(event.staff);
-    printf("event: name=%s, location=%s\n", event.summary, event.location);
-
-    SDL_Rect* p2 = new SDL_Rect{
-      m_pos.x, m_pos.y + CALENDAR_ITEM_HEIGHT + 2,
-      m_pos.w, CALENDAR_ITEM_HEIGHT
-    };
-    auto test_cal2 = new CalendarItemControl(p2);
-    ics_parser->next_event(event, [&local, &year, &month](CalendarEvent& e)->bool
-    {
-      return 
-        e.start.year >= year
-      && e.start.month >= month
-      && e.start.day >= local.tm_mday;
-    });
-    
-    snprintf(temp_buffer, sizeof(temp_buffer), "%s (%s)", event.module, event.type);
-    test_cal2->set_title(temp_buffer);
-
-    snprintf(temp_buffer, sizeof(temp_buffer), "%02d:%02d", event.start.hour, event.start.min);
-    test_cal2->set_time(temp_buffer);
-
-    test_cal2->set_location(event.room);
-    test_cal2->set_lecturer(event.staff);
-
-    printf("ok, second event loaded.");
-
-    m_items.push_back(test_cal1);
-    m_items.push_back(test_cal2);
+    update_calendar();
   }
 
   ~CalendarListControl()

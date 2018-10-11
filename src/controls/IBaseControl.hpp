@@ -58,12 +58,26 @@ public:
     return m_pos;
   }
 
+  virtual SDL_Rect* get_pos_ptr()
+  {
+    return &m_pos;
+  }
+
 protected:
   SDL_Rect m_pos;
 
+  virtual void hook_pos_updated()
+  {
+    // Do nothing
+  }
+
   virtual void internal_set_pos(SDL_Rect& pos)
   {
-    m_pos = pos;
+    if (m_pos.x != pos.x || m_pos.y != pos.y || m_pos.w != pos.w || m_pos.h != m_pos.h)
+    {
+      m_pos = pos;
+      hook_pos_updated();
+    }
   }
 };
 
