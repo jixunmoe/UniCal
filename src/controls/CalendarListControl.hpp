@@ -18,6 +18,7 @@ class CalendarListControl : public IBaseControl {
 private:
   std::vector<CalendarItemControl*> m_items;
   IcsParse* ics_parser = nullptr;
+  std::future<void> m_update_task;
 
 public:
   void update_calendar()
@@ -70,7 +71,7 @@ public:
     }
 
     // Update every 10 mins
-    std::async(std::launch::async, [this](){ 
+    m_update_task = std::async(std::launch::async, [this](){ 
       std::this_thread::sleep_for(std::chrono::minutes(10));
       this->update_calendar();
     });
