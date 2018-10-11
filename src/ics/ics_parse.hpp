@@ -158,6 +158,7 @@ public:
       {
         Safe::strcpy(event.description, sizeof(event.description), value);
 #if CALENDAR_UNIVERSITY_YORK_EXTEND_INFO
+        // CALENDAR_DESC_FIELD and CALENDAR_UNIVERSITY_YORK_EXTEND_INFO
         extract_desc_text(event.description, "Staff member(s): ", event_buffer, sizeof(event_buffer));
         if (event_buffer[0] != 0)
         {
@@ -286,6 +287,20 @@ private:
     {
       file.read(&next_byte, 1);
 
+      if (next_byte == '\r') continue;
+
+      // Treat as same line
+      if (next_byte == '\n')
+      {
+        if (file.peek() == ' ')
+        {
+          file.seekg(1, std::ios_base::cur);
+          continue;
+        }
+
+        break;
+      }
+      
       if (escape_next)
       {
         switch (next_byte)
@@ -307,18 +322,6 @@ private:
       {
         escape_next = true;
         continue;
-      } else if (next_byte == '\r')
-      {
-        continue;
-      } else if (next_byte == '\n')
-      {
-        if (file.peek() == ' ')
-        {
-          file.seekg(1, std::ios_base::cur);
-          continue;
-        }
-
-        break;
       }
 
       if (pos < size)
