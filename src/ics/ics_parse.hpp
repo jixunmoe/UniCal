@@ -8,6 +8,7 @@
 #include <functional>
 
 #include "../safe_function.h"
+#include "../StreamBackend.h"
 
 #define ICS_STR_EQUAL_TO(a, b) (strncmp((a), (b), sizeof(b)) == 0)
 // typedef bool (*ics_event_filter)(CalendarEvent& event);
@@ -17,21 +18,18 @@ typedef std::function<bool(CalendarEvent& event)> ics_event_filter;
 class IcsParse
 {
 public:
-  IcsParse(const std::string& path)
+  IcsParse(StreamBackend* backend)
   {
-    open(path);
+    this->backend = backend;
   }
   ~IcsParse()
   {
-    if (file.is_open())
-    {
-      file.close();
-    }
   }
 
-  void open(const std::string& path)
+  StreamBackend* set_backend(StreamBackend* backend)
   {
-    file.open(path, std::ifstream::in | std::ifstream::binary);
+    StreamBackend* prev_backend = this->backend;
+    this->backend = backend;
     restart();
   }
 
@@ -39,8 +37,8 @@ public:
   {
     char buffer[20];
 
-    file.seekg(0, std::ios_base::beg);
-    while(!file.eof())
+    backend->seek(0);
+    while(!backend->is_eof())
     {
       if (!readline(buffer, sizeof(buffer)))
       {
@@ -65,7 +63,7 @@ public:
     bool success = false;
     bool vevent_begin = false;
     
-    while(!file.eof())
+    while(!backend->is_eof())
     {
       readline(event_buffer, SIZE_TEXT, &str_size);
 
@@ -173,7 +171,7 @@ public:
   }
 
 private:
-  std::ifstream file;
+  StreamBackend* backend = nullptr;
   char event_buffer[SIZE_TEXT];
 
   static void extract_desc_text(char* desc, const char* keyword, char* buffer, size_t size)
@@ -248,21 +246,22 @@ private:
 
   std::string readline()
   {
-    if (file.eof()) return "";
+    if (backend->is_eof()) return "";
 
     std::string line_read;
-    std::getline(file, line_read);
+    backend->get_line(line_read);
 
     std::stringstream builder(line_read);
+    char buf_tmp[1];
 
-    while(!file.eof())
+    while(!backend->is_eof())
     {
-      if (file.peek() == ' ')
+      if (backend->peek() == ' ')
       {
         // skip the space
-        file.seekg(1, std::ios_base::cur);
+        backend->read(buf_tmp, 1);
 
-        std::getline(file, line_read);
+        backend->get_line(line_read);
 
         // Connect the line
         builder << line_read;
@@ -277,7 +276,7 @@ private:
 
   bool readline(char* buffer, size_t size, size_t* str_size = nullptr)
   {
-    if (file.eof()) return false;
+    if (backend->is_eof()) return false;
 
     bool escape_next = false;
     char next_byte;
@@ -285,16 +284,16 @@ private:
 
     while(true)
     {
-      file.read(&next_byte, 1);
+      backend->read(&next_byte, 1);
 
       if (next_byte == '\r') continue;
 
       // Treat as same line
       if (next_byte == '\n')
       {
-        if (file.peek() == ' ')
+        if (backend->peek() == ' ')
         {
-          file.seekg(1, std::ios_base::cur);
+          backend->read(&next_byte, 1);
           continue;
         }
 

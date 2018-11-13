@@ -6,6 +6,7 @@ project(UniCal)
 
 find_package (Threads)
 find_package(SDL2 CONFIG REQUIRED)
+find_package(CURL REQUIRED)
 
 find_library(SDL2_IMAGE_LIBRARY SDL2_image CONFIG REQUIRED)
 find_library(SDL2_IMAGE_LIB SDL2_image CONFIG REQUIRED)
@@ -18,4 +19,4 @@ include_directories(src)
 
 add_executable(UniCal ${SRCS})
 target_link_libraries(
-  UniCal PRIVATE SDL2 ${SDL2_IMAGE_LIB} ${SDL2_TTF_LIB} ${CMAKE_THREAD_LIBS_INIT})
+  UniCal PRIVATE SDL2 ${SDL2_IMAGE_LIB} ${SDL2_TTF_LIB} ${CURL_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})

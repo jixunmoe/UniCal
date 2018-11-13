@@ -25,6 +25,15 @@
     <ClInclude Include="src\FontManager.hpp" />
     <ClInclude Include="src\types.h" />
     <ClInclude Include="src\safe_function.h" />
+    <ClInclude Include="StreamBackend.h">
+      <Filter>StreamBackend</Filter>
+    </ClInclude>
+    <ClInclude Include="FileBackend.h">
+      <Filter>StreamBackend</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorBackend.h">
+      <Filter>StreamBackend</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="controls">
@@ -36,10 +45,22 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{fb6439b4-8367-4305-a01f-f708bca88c57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="StreamBackend">
+      <UniqueIdentifier>{a7c9e43c-3e7b-4363-90a7-0666549472ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamBackend.cpp">
+      <Filter>StreamBackend</Filter>
+    </ClCompile>
+    <ClCompile Include="FileBackend.cpp">
+      <Filter>StreamBackend</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorBackend.cpp">
+      <Filter>StreamBackend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

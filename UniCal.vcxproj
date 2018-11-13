@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FileBackend.h" />
     <ClInclude Include="src\controls\CalendarItemControl.hpp" />
     <ClInclude Include="src\controls\CalendarListControl.hpp" />
     <ClInclude Include="src\controls\FrameControl.hpp" />
@@ -165,9 +166,14 @@
     <ClInclude Include="src\ics\types.hpp" />
     <ClInclude Include="src\safe_function.h" />
     <ClInclude Include="src\types.h" />
+    <ClInclude Include="StreamBackend.h" />
+    <ClInclude Include="VectorBackend.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FileBackend.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="StreamBackend.cpp" />
+    <ClCompile Include="VectorBackend.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
