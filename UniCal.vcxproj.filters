@@ -25,13 +25,13 @@
     <ClInclude Include="src\FontManager.hpp" />
     <ClInclude Include="src\types.h" />
     <ClInclude Include="src\safe_function.h" />
-    <ClInclude Include="StreamBackend.h">
+    <ClInclude Include="src\FileBackend.h">
       <Filter>StreamBackend</Filter>
     </ClInclude>
-    <ClInclude Include="FileBackend.h">
+    <ClInclude Include="src\StreamBackend.h">
       <Filter>StreamBackend</Filter>
     </ClInclude>
-    <ClInclude Include="VectorBackend.h">
+    <ClInclude Include="src\VectorBackend.h">
       <Filter>StreamBackend</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,13 +53,13 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StreamBackend.cpp">
+    <ClCompile Include="src\FileBackend.cpp">
       <Filter>StreamBackend</Filter>
     </ClCompile>
-    <ClCompile Include="FileBackend.cpp">
+    <ClCompile Include="src\StreamBackend.cpp">
       <Filter>StreamBackend</Filter>
     </ClCompile>
-    <ClCompile Include="VectorBackend.cpp">
+    <ClCompile Include="src\VectorBackend.cpp">
       <Filter>StreamBackend</Filter>
     </ClCompile>
   </ItemGroup>
