@@ -1,5 +1,6 @@
 #include "VectorBackend.h"
 
+#include <cstring>
 #include <algorithm>
 
 VectorBackend::VectorBackend()
@@ -30,7 +31,7 @@ void VectorBackend::read(void * buffer, size_t size)
     return;
   }
 
-  std::memcpy(buffer, data.data() + pos, copy_size);
+  memcpy(buffer, data.data() + pos, copy_size);
 
   pos += copy_size;
 }
