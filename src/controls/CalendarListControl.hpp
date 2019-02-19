@@ -20,7 +20,7 @@
 #define CALENDAR_ITEM_HEIGHT (14*3 + 4)
 #define CALENDAR_DATE_HEIGHT (15)
 #define CALENDAR_REPAINT_INTERVAL (std::chrono::minutes(10))
-#define CALENDAR_FETCH_INTERVAL (std::chrono::hours(24))
+#define CALENDAR_FETCH_INTERVAL (std::chrono::hours(6))
 
 class CalendarListControl : public IBaseControl {
 private:
